@@ -1,0 +1,72 @@
+name: ArenaUHC
+version: 0.1
+author: TheTonyk
+description: Arena UHC Plugin by TheTonyk for CommandsPVP Minecraft Server.
+prefix: Arena
+softdepend: [ProtocolLib, Pregennerator]
+main: com.thetonyk.arena.Main
+
+commands:
+    about:
+        description: About the plugin.
+        usage: /about
+    world:
+        description: Manage worlds
+        usage: /world
+        aliases: [w]
+    whitelist:
+        description: Manage the whitelist
+        usage: /whitelist
+        aliases: [wl, wh]
+    rank:
+        description: Change ranks of players.
+        usage: /rank
+    pregen:
+        description: Pregenerate worlds
+        usage: /pregen
+    broadcast:
+        description: Broadcast message to all players.
+        usage: /broadcast
+        aliases: [bc]
+    border:
+        description: Change size of world
+        usage: /border
+    butcher:
+        description: Kill all mobs
+        usage: /butcher
+    clear:
+        description: Clear inventories of players.
+        usage: /clear
+    gamemode:
+        description: Change gamemode of players.
+        usage: /gamemode
+        aliases: [gm]
+    arena:
+        description: Setup arenas
+        usage: /arena
+        aliases: [a]
+    lag:
+        description: About the server
+        usage: /lag
+        aliases: [tps]
+    ms:
+        description: See ping
+        usage: /ms
+        aliases: [ping]
+    help:
+        description: All commands of the server
+        usage: /help
+        aliases: [h]
+    utils:
+        description: Somes utils things
+        usage: /utils
+    fly:
+        description: Enable fly
+        usage: /fly
+    p:
+        description: Private Chat
+        usage: /p
+    lobby:
+        description: Back to lobby
+        usage: /lobby
+        aliases: [hub, leave, exit, kill, suicide]
