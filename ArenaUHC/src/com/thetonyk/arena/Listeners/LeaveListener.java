@@ -80,6 +80,13 @@ public class LeaveListener implements Listener{
 					
 				}
 				
+				if (Arena.water.contains(block)) {
+					
+					block.getBlock().setType(Material.STATIONARY_WATER);
+					Arena.water.remove(block);
+					
+				}
+				
 			}
 		
 			Arena.playerBlocks.remove(player);

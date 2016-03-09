@@ -128,11 +128,25 @@ public class PlayerListener implements Listener {
 				if (Arena.playerBlocks.get(player).contains(event.getBlock().getLocation())) {
 					
 					Arena.playerBlocks.get(player).remove(event.getBlock().getLocation());
-					return;
 					
 				}
 				
 			}
+			
+			new BukkitRunnable() {
+				
+				public void run() {
+					
+					if (Arena.water.contains(event.getBlock().getLocation())) {
+						
+						event.getBlock().setType(Material.STATIONARY_WATER);
+						Arena.water.remove(event.getBlock().getLocation());
+						
+					}
+					
+				}
+				
+			}.runTaskLater(Main.arena, 1);
 			
 	}
 	
@@ -203,6 +217,12 @@ public class PlayerListener implements Listener {
 		
 		Arena.blocks.add(event.getBlock().getLocation());
 		
+		if (event.getBlockReplacedState().getType() == Material.STATIONARY_WATER || event.getBlockReplacedState().getType() == Material.WATER) {
+			
+			Arena.water.add(event.getBlock().getLocation());
+			
+		}
+		
 		if (!Arena.playerBlocks.containsKey(event.getPlayer())) {
 			
 			Arena.playerBlocks.put(event.getPlayer(), new ArrayList<Location>());
@@ -250,6 +270,13 @@ public class PlayerListener implements Listener {
 					Arena.playerBlocks.get(player).remove(nearBlock.getLocation());
 					
 				}
+				
+			}
+			
+			if (Arena.water.contains(nearBlock.getLocation())) {
+				
+				nearBlock.setType(Material.STATIONARY_WATER);
+				Arena.water.remove(nearBlock.getLocation());
 				
 			}
 			
@@ -662,6 +689,13 @@ public class PlayerListener implements Listener {
 						if (Arena.blocks.contains(block)) {
 							
 							Arena.blocks.remove(block);
+							
+						}
+						
+						if (Arena.water.contains(block)) {
+							
+							block.getBlock().setType(Material.STATIONARY_WATER);
+							Arena.water.remove(block);
 							
 						}
 						

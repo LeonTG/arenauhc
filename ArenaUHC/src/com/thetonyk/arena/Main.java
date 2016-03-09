@@ -380,8 +380,15 @@ public class Main extends JavaPlugin {
 					
 				}
 				
+				for (Location block : Arena.water) {
+					
+					block.getBlock().setType(Material.STATIONARY_WATER);
+					
+				}
+				
 				Arena.blocks.clear();
 				Arena.playerBlocks.clear();
+				Arena.water.clear();
 
 			}
 			
@@ -407,6 +414,12 @@ public class Main extends JavaPlugin {
 				block.getBlock().setType(Material.AIR);
 				
 			}
+			
+		}
+		
+		for (Location block : Arena.water) {
+			
+			block.getBlock().setType(Material.STATIONARY_WATER);
 			
 		}
 		
@@ -437,6 +450,7 @@ public class Main extends JavaPlugin {
 		
 		Arena.blocks.clear();
 		Arena.playerBlocks.clear();
+		Arena.water.clear();
 		
 		bar.removeAll();
 		

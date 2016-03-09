@@ -5,6 +5,7 @@ import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -12,6 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import com.thetonyk.arena.Arena;
 import com.thetonyk.arena.Main;
@@ -54,6 +56,39 @@ public class LobbyCommand implements CommandExecutor, TabCompleter {
 			PlayerUtils.updateScoreboard(player);
 			
 		}
+		
+		new BukkitRunnable() {
+			
+			public void run() {
+				
+				if (Arena.playerBlocks.containsKey(player)) {
+					
+					for (Location block : Arena.playerBlocks.get(player)) {
+						
+						block.getBlock().setType(Material.AIR);
+						
+						if (Arena.blocks.contains(block)) {
+							
+							Arena.blocks.remove(block);
+							
+						}
+						
+						if (Arena.water.contains(block)) {
+							
+							block.getBlock().setType(Material.STATIONARY_WATER);
+							Arena.water.remove(block);
+							
+						}
+						
+					}
+					
+					Arena.playerBlocks.get(player).clear();
+					
+				}
+				
+			}
+			
+		}.runTaskLater(Main.arena, 5);
 		
 		player.teleport(Bukkit.getWorld("lobby").getSpawnLocation().add(0.5, 0, 0.5));
 		player.setGameMode(GameMode.ADVENTURE);
