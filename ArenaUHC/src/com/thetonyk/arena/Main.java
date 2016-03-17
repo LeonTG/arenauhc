@@ -56,8 +56,7 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
 
 public class Main extends JavaPlugin {
-	
-	public static Main arena;
+	public static Main arena; // I normally would use constructor instances for this -leon
 	
 	public static final String NO_PERMS = "§fUnknown command.";
 	public static final String PREFIX = "§a§lArena §8⫸ §7";
@@ -66,16 +65,13 @@ public class Main extends JavaPlugin {
 	
 	@Override
 	public void onEnable() {
-		
 		getLogger().info("Arena UHC Plugin has been enabled.");
 		getLogger().info("Plugin by TheTonyk for CommandsPVP");
 		
 		arena = this;
 		
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			
 			PermissionsUtils.setPermissions(player);
-			
 		}
 		
 		WorldUtils.loadAllWorlds();
@@ -83,16 +79,12 @@ public class Main extends JavaPlugin {
 		Bukkit.clearRecipes();
 		
 		for (int i = 0; i < TreeSpecies.values().length; i++) {
-		
 			for (int y = 0; y < TreeSpecies.values().length; y++) {
-				
 				ShapelessRecipe stick = new ShapelessRecipe(ItemsUtils.createItem(Material.STICK, "§b§lCommandsPVP §r§6Stick", 4, 0));
 				stick.addIngredient(new Wood(TreeSpecies.values()[i]));
 				stick.addIngredient(new Wood(TreeSpecies.values()[y]));
 				Bukkit.addRecipe(stick);
-			
 			}
-			
 		}
 		
 		ShapedRecipe diamondSword1 = new ShapedRecipe(ItemsUtils.createItem(Material.DIAMOND_SWORD, "§b§lCommandsPVP §r§6Sword", 1, 0));
@@ -152,24 +144,24 @@ public class Main extends JavaPlugin {
 		diamondBoots2.setIngredient('B', Material.DIAMOND);
 		Bukkit.addRecipe(diamondBoots2);
 		
-		this.getCommand("about").setExecutor(new AboutCommand());
-		this.getCommand("world").setExecutor(new WorldCommand());
-		this.getCommand("whitelist").setExecutor(new WhitelistCommand());
-		this.getCommand("rank").setExecutor(new RankCommand());
-		this.getCommand("pregen").setExecutor(new PregenCommand());
-		this.getCommand("border").setExecutor(new BorderCommand());
-		this.getCommand("broadcast").setExecutor(new BroadcastCommand());
-		this.getCommand("butcher").setExecutor(new ButcherCommand());
-		this.getCommand("clear").setExecutor(new ClearCommand());
-		this.getCommand("gamemode").setExecutor(new GamemodeCommand());
-		this.getCommand("arena").setExecutor(new ArenaCommand());
-		this.getCommand("lag").setExecutor(new LagCommand());
-		this.getCommand("ms").setExecutor(new MsCommand());
-		this.getCommand("help").setExecutor(new HelpCommand());
-		this.getCommand("utils").setExecutor(new UtilsCommand());
-		this.getCommand("fly").setExecutor(new FlyCommand());
-		this.getCommand("p").setExecutor(new PCommand());
-		this.getCommand("lobby").setExecutor(new LobbyCommand());
+		getCommand("about").setExecutor(new AboutCommand());
+		getCommand("world").setExecutor(new WorldCommand());
+		getCommand("whitelist").setExecutor(new WhitelistCommand());
+		getCommand("rank").setExecutor(new RankCommand());
+		getCommand("pregen").setExecutor(new PregenCommand());
+		getCommand("border").setExecutor(new BorderCommand());
+		getCommand("broadcast").setExecutor(new BroadcastCommand());
+		getCommand("butcher").setExecutor(new ButcherCommand());
+		getCommand("clear").setExecutor(new ClearCommand());
+		getCommand("gamemode").setExecutor(new GamemodeCommand());
+		getCommand("arena").setExecutor(new ArenaCommand());
+		getCommand("lag").setExecutor(new LagCommand());
+		getCommand("ms").setExecutor(new MsCommand());
+		getCommand("help").setExecutor(new HelpCommand());
+		getCommand("utils").setExecutor(new UtilsCommand());
+		getCommand("fly").setExecutor(new FlyCommand());
+		getCommand("p").setExecutor(new PCommand());
+		getCommand("lobby").setExecutor(new LobbyCommand());
 		
 		PluginManager manager = Bukkit.getPluginManager();
 		
@@ -181,7 +173,6 @@ public class Main extends JavaPlugin {
 		manager.registerEvents(new InventoryListener(), this);
 		
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			
 			Arena.scoreboard.put(player, Bukkit.getScoreboardManager().getNewScoreboard());
 			Arena.scoreboard.get(player).registerNewObjective("below", "dummy");
 			Arena.scoreboard.get(player).getObjective("below").setDisplaySlot(DisplaySlot.BELOW_NAME);
@@ -196,34 +187,26 @@ public class Main extends JavaPlugin {
 			PlayerUtils.setupScore(player);	
 			PlayerUtils.updateScoreboard(player);	
 			PlayerUtils.updateNametag(player.getName());
-			
 		}
 		
 		new BukkitRunnable() {
-			
 			public void run() {
-				
-				for (Player scoreboard : Arena.scoreboard.keySet()) {
-				
-					for (Player player : Bukkit.getOnlinePlayers()) {
-						
-						Arena.scoreboard.get(scoreboard).getObjective("below").getScore(player.getName()).setScore((int) (((player.getHealth()) / 2) * 10));
-						Arena.scoreboard.get(scoreboard).getObjective("list").getScore(player.getName()).setScore((int) (((player.getHealth()) / 2) * 10));
-						
-					}
+				for (Player online : Bukkit.getOnlinePlayers()) {
+					Scoreboard board = online.getScoreboard();
 					
+					Objective below = board.getObjective("below");
+					Objective list = board.getObjective("list");
+					
+					below.getScore(sbPlayer.getName()).setScore((int) (((sbPlayer.getHealth()) / 2) * 10));
+				        list.getScore(sbPlayer.getName()).setScore((int) (((sbPlayer.getHealth()) / 2) * 10));
 				}
-				
 			}
-			
-		}.runTaskTimer(Main.arena, 1, 1);
+		}.runTaskTimer(this, 1, 1);
 		
 		new BukkitRunnable() {
-			
 			int color = 1;
 			
 			public void run() {
-				
 				BarColor barColor = color == 1 ? BarColor.GREEN : BarColor.RED;
 				String barTitle = color == 1 ? "§cTeaming not allowed in the Arena" : "§aTeaming not allowed in the Arena";
 				bar.setColor(barColor);
@@ -232,142 +215,97 @@ public class Main extends JavaPlugin {
 				for (Player player : Bukkit.getOnlinePlayers()) {
 					DisplayUtils.sendTab(player);
 					bar.addPlayer(player);
-					
 				}
 				
 				color = color == 1 ? 2 : 1;
 				
 				for (Player player : Bukkit.getWorld("lobby").getPlayers()) {
-					
 					if (player.getGameMode() == GameMode.ADVENTURE) {
-					
 						ArenaUtils.updateNames(player);
-					
 					}
-				
 				}
-				
 			}
-			
-		}.runTaskTimer(Main.arena, 1, 20);
+		}.runTaskTimer(this, 1, 20);
 		
 		new BukkitRunnable() {
-			
 			int messageType = 1;
 			
 			public void run() {
-				
 				String message = messageType == 1 ? "§7Use §a/hotbar §7to customize your kit" : "§7Use §a/help §7to see availables commands";
 				
 				for (Player player : Bukkit.getWorld("lobby").getPlayers()) {
-					
 					DisplayUtils.sendActionBar(player, message);
-					
 				}
 				
-				new BukkitRunnable() { public void run() {
-					
-					for (Player player : Bukkit.getWorld("lobby").getPlayers()) {
-						
-						DisplayUtils.sendActionBar(player, message);
-						
-					}
+				new BukkitRunnable() { 
+					public void run() {
+				  	 	for (Player player : Bukkit.getWorld("lobby").getPlayers()) {
+							DisplayUtils.sendActionBar(player, message);
+						}
+					} 
+				}.runTaskLater(Main.arena, 40);
 				
-				} }.runTaskLater(Main.arena, 40);
-				
-				new BukkitRunnable() { public void run() {
-					
-					for (Player player : Bukkit.getWorld("lobby").getPlayers()) {
-						
-						DisplayUtils.sendActionBar(player, message);
-						
-					}
-				
-				} }.runTaskLater(Main.arena, 80);
+				new BukkitRunnable() { 
+					public void run() {
+						for (Player player : Bukkit.getWorld("lobby").getPlayers()) {
+							DisplayUtils.sendActionBar(player, message);
+						}
+					} 
+				}.runTaskLater(Main.arena, 80);
 				
 				messageType = messageType == 1 ? 2 : 1;
-				
 			}
-			
-		}.runTaskTimer(Main.arena, 1, 120);
+		}.runTaskTimer(this, 1, 120);
 		
 		new BukkitRunnable() {
-			
 			public void run() {
-
 				for (String id : ArenaUtils.getArenas()) {
+					if (Bukkit.getWorld(ArenaUtils.getWorld(id)).getPlayers().isEmpty()) {
+						continue;
+					}
 					
-					if (Bukkit.getWorld(ArenaUtils.getWorld(id)).getPlayers().size() > 1) {
-						
-						for (Player player : Bukkit.getWorld(ArenaUtils.getWorld(id)).getPlayers()) {
+					for (Player player : Bukkit.getWorld(ArenaUtils.getWorld(id)).getPlayers()) {
+						double nearestSize;
+						Player nearestPlayer;
 							
-							double nearestSize = (double) WorldUtils.getSize(ArenaUtils.getWorld(id));
-							Player nearestPlayer = null;
-							
-							for (Player potential : Bukkit.getWorld(ArenaUtils.getWorld(id)).getPlayers()) {
-								
-								if (potential != player) {
-									
-									if (player.getLocation().distance(potential.getLocation()) < nearestSize) {
-										
-										nearestSize = player.getLocation().distance(potential.getLocation());
-										nearestPlayer = potential;
-										
-									}
-									
-								}
-								
+						for (Player potential : Bukkit.getWorld(ArenaUtils.getWorld(id)).getPlayers()) {
+							if (potential == player) {
+								continue;
 							}
 							
-							player.setCompassTarget(nearestPlayer.getLocation());
-							DisplayUtils.sendActionBar(player, "§7Nearest player is '§6" + nearestPlayer.getName() + "§7' §8(§a" + (int) nearestSize + "§7 blocks§8)");
-							
+							if (player.getLocation().distance(potential.getLocation()) < nearestSize) {
+								nearestSize = player.getLocation().distance(potential.getLocation());
+								nearestPlayer = potential;
+							}	
 						}
-						
+							
+						player.setCompassTarget(nearestPlayer.getLocation());
+						DisplayUtils.sendActionBar(player, "§7Nearest player is '§6" + nearestPlayer.getName() + "§7' §8(§a" + (int) nearestSize + "§7 blocks§8)");
 					}
-					
 				}
-
 			}
-			
-		}.runTaskTimer(Main.arena, 1, 600);
+		}.runTaskTimer(this, 1, 600);
 			
 		new BukkitRunnable() {
-			
 			public void run() {
-
 				for (String id : ArenaUtils.getArenas()) {
-					
 					if (Bukkit.getWorld(ArenaUtils.getWorld(id)).getPlayers().size() < 5) {
-						
 						ArenaUtils.setSize(id, 100);
-						
 					}
 					else if ((Bukkit.getWorld(ArenaUtils.getWorld(id)).getPlayers().size() * 25) < WorldUtils.getSize(ArenaUtils.getWorld(id))) {
-						
 						ArenaUtils.setSize(id, (Bukkit.getWorld(ArenaUtils.getWorld(id)).getPlayers().size() * 25));
-						
 					}
 					else {
-						
 						ArenaUtils.setSize(id, WorldUtils.getSize(ArenaUtils.getWorld(id)));
-						
 					}
-					
 				}
-
 			}
-			
-		}.runTaskTimer(Main.arena, 1, 1200);
+		}.runTaskTimer(this, 1, 1200);
 		
 		new BukkitRunnable() {
-			
 			public void run() {
-
 				for (Location block : Arena.blocks) {
-					
 					block.getBlock().setType(Material.AIR);
-					
 				}
 				
 				for (Player player : Arena.playerBlocks.keySet()) {
@@ -392,52 +330,38 @@ public class Main extends JavaPlugin {
 
 			}
 			
-		}.runTaskTimer(Main.arena, 1, 12000);
-		
+		}.runTaskTimer(this, 1, 12000);
 	}
 	
 	@Override
 	public void onDisable() {
-		
 		getLogger().info("Arena UHC Plugin has been disabled.");
 		
 		for (Location block : Arena.blocks) {
-			
 			block.getBlock().setType(Material.AIR);
-			
 		}
 		
 		for (Player player : Arena.playerBlocks.keySet()) {
-			
 			for (Location block : Arena.playerBlocks.get(player)) {
-				
 				block.getBlock().setType(Material.AIR);
-				
 			}
-			
 		}
 		
 		for (Location block : Arena.water) {
-			
 			block.getBlock().setType(Material.STATIONARY_WATER);
-			
 		}
 		
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			
 			if (Arena.joinTime.containsKey(player)) {
-				
 				Calendar time = new GregorianCalendar();
 				time.setTime(new Date(new Date().getTime() - Arena.joinTime.get(player)));
 				int minutes = time.get(Calendar.MINUTE);
 				PlayerUtils.setTime(player, PlayerUtils.getTime(player) + minutes);
 				Arena.joinTime.remove(player);
-				
 			}
 			
 			PlayerUtils.updateScores(player);
 			player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
-			
 		}
 		
 		Arena.scoreboard.clear();
@@ -455,11 +379,9 @@ public class Main extends JavaPlugin {
 		bar.removeAll();
 		
 		arena = null;
-		
 	}
 	
 	public static TextComponent getPrefixComponent() {
-		
 		TextComponent prefix1 = new TextComponent("Arena ");
 		prefix1.setColor(ChatColor.GREEN);
 		prefix1.setBold(true);
@@ -469,7 +391,5 @@ public class Main extends JavaPlugin {
 		prefix1.addExtra(prefix2);
 		
 		return prefix1;
-		
 	}
-	
 }
